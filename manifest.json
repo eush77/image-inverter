@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "Image Inverter",
+    "version": "0.1",
+    "description": "Provides image-inversion facilities (available in image context menus).",
+
+    "permissions": [
+        "contextMenus",
+        "*://*/"
+    ],
+
+    "background": {
+        "scripts": ["background.js"]
+    }
+}
