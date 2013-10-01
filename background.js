@@ -20,7 +20,7 @@ var messageSender = function(message) {
             // Needed to inject first
             infectedTabs[tab.id] = true;
             chrome.tabs.executeScript(tab.id, {
-                file: "injection.js",
+                file: 'injection.js',
                 allFrames: true,
             });
             chrome.runtime.onMessage.addListener(function listener(message, sender, sendResponse) {
@@ -36,8 +36,8 @@ var messageSender = function(message) {
 
 // Image context menu entry
 chrome.contextMenus.create({
-    title: "Invert this image",
-    contexts: ["image"],
+    title: 'Invert this image',
+    contexts: ['image'],
     onclick: function(info, tab) {
         messageSender({
             type: 'invert-image',
