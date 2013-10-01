@@ -39,6 +39,11 @@ chrome.runtime.onMessage.addListener(function(message) {
     case 'invert-image':
         invert(message.data);
         break;
+    case 'invert-all-images':
+        [].forEach.call(document.images, function(img) {
+            invert(img);
+        });
+        break;
     }
 });
 

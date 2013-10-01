@@ -8,18 +8,13 @@ chrome.runtime.onMessage.addListener(function(message) {
     }
 });
 
-chrome.contextMenus.create({
-    title: "Invert this image",
-    contexts: ["image"],
-    onclick: function(info, tab) {
-        var postInvertMessage = function() {
-            chrome.tabs.sendMessage(tab.id, {
-                type: 'invert-image',
-                data: info.srcUrl,
-            });
+var messageSender = function(message) {
+    return function(info, tab) {
+        var post = function() {
+            chrome.tabs.sendMessage(tab.id, message);
         };
         if (infectedTabs[tab.id]) {
-            postInvertMessage();
+            post();
         }
         else {
             // Needed to inject first
@@ -32,9 +27,30 @@ chrome.contextMenus.create({
                 if (message.type == 'injection-loaded') {
                     chrome.runtime.onMessage.removeListener(listener);
                     sendResponse(tab.id); // Tell the script its tab.id
-                    postInvertMessage();
+                    post();
                 }
             });
         }
+    };
+};
+
+// Image context menu entry
+chrome.contextMenus.create({
+    title: "Invert this image",
+    contexts: ["image"],
+    onclick: function(info, tab) {
+        messageSender({
+            type: 'invert-image',
+            data: info.srcUrl,
+        })(info, tab);
     },
+});
+
+// Page context menu entry
+chrome.contextMenus.create({
+    title: 'Invert all images',
+    contexts: ['page'],
+    onclick: messageSender({
+        type: 'invert-all-images',
+    }),
 });
